@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web端颜色监控报警器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Web端颜色监控报警器</h1>
+        <div class="video-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="controls">
+            <button id="select-points-btn">设置监控点</button>
+            <button id="clear-points-btn">清除所有点</button>
+            <button id="toggle-monitoring-btn">开始监控</button>
+            <div class="threshold-control">
+                <label for="threshold">报警灵敏度 (Delta E):</label>
+                <input type="number" id="threshold" value="30" min="1" max="200">
+            </div>
+        </div>
+        <div class="log-container">
+            <h3>运行日志</h3>
+            <div id="log-box"></div>
+        </div>
+    </div>
+    <audio id="alarm-sound" src="alarm.wav" preload="auto"></audio>
+    <script src="script.js"></script>
+</body>
+</html>

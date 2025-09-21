@@ -1,0 +1,20 @@
+# Ignore old Python project files
+pixel_identifier/
+main.py
+requirements.txt
+convert_audio.py
+generate_wav.py
+config.json
+l1.json
+RBY.json
+real_world_use_cases.txt
+LICENSE
+README.md
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
