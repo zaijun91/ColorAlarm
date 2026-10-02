@@ -1,0 +1,45 @@
+name: Static checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Check JavaScript syntax
+        run: node --check script.js
+      - name: Check local page assets
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class Assets(HTMLParser):
+              def handle_starttag(self, tag, attrs):
+                  if tag not in {'link', 'script', 'audio', 'img', 'source'}:
+                      return
+                  key = 'href' if tag == 'link' else 'src'
+                  value = dict(attrs).get(key)
+                  if not value or value.startswith(('http:', 'https:', '//', 'data:', '#')):
+                      return
+                  path = Path(value.split('?', 1)[0].split('#', 1)[0])
+                  if not path.is_file() or path.stat().st_size == 0:
+                      raise SystemExit(f'Missing or empty asset: {path}')
+                  print(f'OK: {path}')
+
+          Assets().feed(Path('index.html').read_text(encoding='utf-8'))
+          PY
